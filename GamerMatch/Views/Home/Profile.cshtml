@@ -1,0 +1,58 @@
+﻿@using System.Text.Json
+
+@{
+    ViewData["Title"] = "Profile";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@model AspNetUsers
+
+@{
+    GamerMatchContext db = new GamerMatchContext();
+    List<MatchTable> matchList = db.MatchTable.ToList<MatchTable>();
+    AspNetUsers currentUser = JsonSerializer.Deserialize<AspNetUsers>(ViewData["Current"] as string);  
+    int? rating = null;
+
+}
+
+<h1>Profile</h1>
+
+<h3>Username: @Model.UserName</h3>
+<h3>Email: @Model.Email</h3>
+@if (Model.SteamInfo != null)
+{
+<h3>Steam Profile: <a href="https://steamcommunity.com/profiles/@Model.SteamInfo/">Click Here</a></h3>
+}
+else
+{
+    <h3>Steam ID - Not connected.</h3>
+}
+<h3>Favorite Board Games:</h3>
+@if (Model.BoardGamePref != null)
+{
+    List<string> boardGameList = Model.BoardGamePref.Split(',').ToList<string>();
+    foreach (string item in boardGameList)
+    {
+        <li>
+            @item
+        </li>
+    }
+}
+@{
+    for (int i = 0; i < matchList.Count; i++)
+    {
+        if (matchList[i].UserSend == currentUser.Id && matchList[i].UserGet == Model.UserName && matchList[i].Status == 1)
+        {
+            rating = matchList[i].Rating;
+        }
+    }
+    @if (rating == null)
+
+    {
+        <h3>Your Rating: Not yet rated</h3>
+    }
+    else
+    {
+        <h3>Your Rating: @rating</h3>
+    }
+}

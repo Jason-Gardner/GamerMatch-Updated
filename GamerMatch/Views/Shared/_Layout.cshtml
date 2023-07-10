@@ -1,0 +1,72 @@
+﻿@using Microsoft.AspNetCore.Identity
+@inject SignInManager<IdentityUser> SignInManager
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - GamerMatch</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+
+    <link href="~/lib/bootstrap/dist/css/bootstrap4-neon-glow.css" rel="stylesheet" />
+    <link rel="stylesheet" href="~/css/site.css" />
+</head>
+<body>
+    <header>
+        <nav class="navbar fixed-top ml-0 navbar-expand navbar-light badge-primary border-bottom box-shadow mb-3">
+            <div class="container">
+                <a class="navbar-brand" style="font-family: Impact" asp-area="" asp-controller="Home" asp-action="Index">GamerMatch</a>
+                <ul class="navbar-nav mr-auto">
+                    @if (SignInManager.IsSignedIn(User))
+                    {
+                    <li class="nav-item">
+                        <button type="button" class="mr-auto nav-link btn text-light badge-info">@User.Identity.Name</button>
+                    </li>
+                    <li class="nav-item">
+                        <a class="mr-auto nav-link btn text-light btn-hover-text-info" asp-area="" asp-controller="Home" asp-action="HomePage">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="mr-auto nav-link btn text-light btn-hover-text-info" asp-area="Home" asp-action="Preferences" title="Manage">Manage Profile</a>
+                    </li>
+                    <li class="nav-item">
+                        <form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
+                            <button type="submit" class="mr-auto nav-link btn text-light btn-hover-text-info badge-info">Logout</button>
+                        </form>
+                    </li>
+                    }
+                    else
+                    {
+                    <li class="nav-item">
+                        <a class="nav-link text-light btn-hover-text-info" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-light btn-hover-text-info" asp-area="Identity" asp-page="/Account/Register">Register</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-light btn-hover-text-info" asp-area="Identity" asp-page="/Account/Login">Login</a>
+                    </li>
+                    }
+                </ul>
+            </div>
+
+        </nav>
+    </header>
+    <partial name="_LoginPartial" />
+    <div class="container" style="padding-top: 100px;">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+
+    <footer class="fixed-bottom footer">
+        <div class="container" style="font-family: Impact; font-size: 20px;">
+            &copy; 2020 - GamerMatch  ----  <a class="text-light btn-hover-text-info" asp-area="" asp-controller="Home" asp-action="Privacy">About GamerMatch</a>
+        </div>
+    </footer>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @RenderSection("Scripts", required: false)
+</body>
+</html>

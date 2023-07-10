@@ -1,0 +1,84 @@
+﻿@using Microsoft.AspNetCore.Identity
+@inject SignInManager<IdentityUser> SignInManager
+@inject UserManager<IdentityUser> UserManager
+
+@if (SignInManager.IsSignedIn(User) && (string)ViewData["Title"] != "Home Page")
+{
+    <div class="sidenav" style="right: 0">
+        <div class="text-center">
+            <fieldset>
+                <form asp-controller="Home" asp-action="Profile">
+                    <div class="form-group align-content-center">
+                        <label for="friend">Friends List</label>
+                        <select name="friend" style="max-width: 70%">
+                            <option value=null></option>
+                            @if (ViewData["Friends"] != null)
+                            {
+                                foreach (var item in ViewData["Friends"] as List<string>)
+                                {
+                                    <option value="@item">@item</option>
+                                }
+                            }
+                        </select>
+                        <input class="form-control btn btn-primary" type="submit" value="View Profile" />
+                    </div>
+                </form>
+                <div class="form-group align-content-center">
+                    <label for="ban">Ban List</label>
+                    <select name="ban" style="min-width:70%; max-width: 70%">
+                        <option value=null></option>
+                        @if (ViewData["Bans"] != null)
+                        {
+                            @foreach (var item in ViewData["Bans"] as List<string>)
+                            {
+                                <option value="@item">@item</option>
+                            }
+                        }
+                    </select>
+                    <button type="button" class="rounded badge-info" value="Clear Bans" onclick="location.href='@Url.Action("Clear", "Match")'">Clear Bans</button>
+                </div>
+                <button type="button" class="form-control btn btn-primary" value="Rate Player" onclick="location.href='@Url.Action("Ratings", "Home")'">Rate Players</button><br />
+            </fieldset>
+        </div>
+        <form id="myformOne" style="padding-top: 10px;" asp-controller="Home" asp-action="Results" onsubmit="return ValidationEvent()">
+            <div id="leftbox">
+                <div class="text-center">
+                    <fieldset>
+                        <legend>Search Options</legend>
+                            <div class="form-group align-content-center">
+                                <label for="game">Steam Game Title</label>
+                                <select name="steamTitle" style="max-width: 70%">
+                                    <option value=null></option>
+                                    @if (ViewData["MyGames"] != null)
+                                    {
+                                        foreach (var item in ViewData["MyGames"] as List<string>)
+                                        {
+                                            <option value="@item">@item</option>
+                                        }
+                                    }
+                                </select>
+                            </div>
+                            <div class="form-group align-content-center">
+                                <input class="form-control btn btn-primary" type="submit" value="Search" />
+                            </div>
+                        
+                        <div class="form-group">
+                            <label for="boardgame">Board Game Title</label>
+                            <select name="boardTitle" style="width: 70%">
+                                <option value=null></option>
+                                @foreach (var item in ViewData["Games"] as List<BoardGames>)
+                                {
+                                    <option value="@item.Title">@item.Title</option>
+                                }
+
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <input class="form-control btn btn-primary" type="submit" value="Search" />
+                        </div>
+                    </fieldset>
+                </div>
+            </div>
+        </form>
+    </div>
+}
